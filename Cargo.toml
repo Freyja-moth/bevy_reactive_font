@@ -1,0 +1,23 @@
+[package]
+name = "bevy_reactive_font"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+thiserror = "2.0.12"
+
+[dependencies.bevy]
+version = "0.16.1"
+default-features = false
+features = [ 
+  "track_location",
+  "dynamic_linking", 
+  "bevy_color", 
+  "bevy_asset", 
+  "bevy_text", 
+  "bevy_ui", 
+  "bevy_window", 
+  "bevy_winit", 
+  "multi_threaded", 
+  "x11"
+]

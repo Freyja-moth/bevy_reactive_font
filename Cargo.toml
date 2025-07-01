@@ -10,14 +10,17 @@ thiserror = "2.0.12"
 version = "0.16.1"
 default-features = false
 features = [ 
-  "track_location",
-  "dynamic_linking", 
   "bevy_color", 
   "bevy_asset", 
   "bevy_text", 
-  "bevy_ui", 
-  "bevy_window", 
-  "bevy_winit", 
-  "multi_threaded", 
-  "x11"
+  "bevy_ui",
+]
+
+[dev-dependencies.bevy]
+version = "0.16.1"
+features = [
+    "bevy_window", 
+    "bevy_winit", 
+    "multi_threaded", 
+    "x11"
 ]

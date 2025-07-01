@@ -22,7 +22,7 @@ impl Plugin for ReactiveFontPlugin {
             .add_systems(
                 Update,
                 (
-                    default_font_changed.run_if(resource_changed::<DefaultFont>),
+                    default_font_changed.run_if(resource_exists_and_changed::<DefaultFont>),
                     font_handle_changed,
                     default_font_size_changed,
                     default_font_color_changed,

@@ -67,7 +67,7 @@ fn default_font_changed(
 #[allow(clippy::type_complexity)]
 fn font_handle_changed(
     mut commands: Commands,
-    default_font: Res<DefaultFont>,
+    default_font: Option<Res<DefaultFont>>,
     fonts: Query<Entity, (With<ReactiveFont>, Without<UsingFont>)>,
     font_handles: Populated<
         &UsedBy,
@@ -80,7 +80,7 @@ fn font_handle_changed(
     >,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if font_handles.contains(default_font.0) {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         if !entities.is_empty() {
@@ -100,12 +100,12 @@ fn font_handle_changed(
 
 fn default_font_size_changed(
     mut commands: Commands,
-    default_font: Res<DefaultFont>,
+    default_font: Option<Res<DefaultFont>>,
     fonts: Query<Entity, (With<ReactiveFont>, Without<UsingFont>)>,
     font_handles: Populated<&UsedBy, Changed<DefaultFontSize>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if font_handles.contains(default_font.0) {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         if !entities.is_empty() {
@@ -125,12 +125,12 @@ fn default_font_size_changed(
 
 fn default_font_color_changed(
     mut commands: Commands,
-    default_font: Res<DefaultFont>,
+    default_font: Option<Res<DefaultFont>>,
     fonts: Query<Entity, (With<ReactiveFont>, Without<UsingFont>)>,
     font_handles: Populated<&UsedBy, Changed<DefaultFontColor>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if font_handles.contains(default_font.0) {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFontColor, entities);

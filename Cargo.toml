@@ -7,7 +7,7 @@ edition = "2024"
 thiserror = "2.0.12"
 
 [dependencies.bevy]
-version = "0.16.1"
+git = "https://github.com/bevyengine/bevy"
 default-features = false
 features = [ 
   "bevy_color", 
@@ -17,7 +17,7 @@ features = [
 ]
 
 [dev-dependencies.bevy]
-version = "0.16.1"
+git = "https://github.com/bevyengine/bevy"
 features = [
     "bevy_window", 
     "bevy_winit", 

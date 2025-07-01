@@ -2,15 +2,15 @@ use crate::prelude::*;
 use bevy::{ecs::relationship::Relationship, prelude::*};
 
 /// Updates the font for the entity it is triggered on.
-#[derive(Event)]
+#[derive(Event, EntityEvent)]
 pub struct UpdateFont;
 
 /// Updates the [`FontSize`] for the entity it is triggered on.
-#[derive(Event)]
+#[derive(Event, EntityEvent)]
 pub struct UpdateFontSize;
 
 /// Updates the [`FontColor`] for the entity it is triggered on.
-#[derive(Event)]
+#[derive(Event, EntityEvent)]
 pub struct UpdateFontColor;
 
 /// A plugin that manages [`ReactiveFont`]'s and [`FontCollection`]'s
@@ -47,7 +47,7 @@ impl Plugin for ReactiveFontPlugin {
     }
 }
 
-fn on_add_reactive_font(on_add: Trigger<OnAdd, ReactiveFont>, mut commands: Commands) {
+fn on_add_reactive_font(on_add: On<Add, ReactiveFont>, mut commands: Commands) {
     commands
         .entity(on_add.target())
         .trigger(UpdateFont)
@@ -148,25 +148,25 @@ fn default_font_color_changed(
 
 // Font Handles
 
-fn selected_font(on_add: Trigger<OnAdd, UsingFont>, mut commands: Commands) {
+fn selected_font(on_add: On<Add, UsingFont>, mut commands: Commands) {
     commands.entity(on_add.target()).trigger(UpdateFont);
 }
 
-fn deselected_font(on_remove: Trigger<OnRemove, UsingFont>, mut commands: Commands) {
+fn deselected_font(on_remove: On<Remove, UsingFont>, mut commands: Commands) {
     commands.entity(on_remove.target()).trigger(UpdateFont);
 }
 
-fn on_add_font_tag(on_add: Trigger<OnAdd, (Bold, Italic)>, mut commands: Commands) {
+fn on_add_font_tag(on_add: On<Add, (Bold, Italic)>, mut commands: Commands) {
     commands.entity(on_add.target()).trigger(UpdateFont);
 }
 
-fn on_remove_font_tag(on_remove: Trigger<OnRemove, (Bold, Italic)>, mut commands: Commands) {
+fn on_remove_font_tag(on_remove: On<Remove, (Bold, Italic)>, mut commands: Commands) {
     commands.entity(on_remove.target()).trigger(UpdateFont);
 }
 
 #[allow(clippy::type_complexity)]
 fn update_font(
-    update: Trigger<UpdateFont>,
+    update: On<UpdateFont>,
     mut reactive_fonts: Populated<(&mut TextFont, Has<Italic>, Has<Bold>, Option<&UsingFont>)>,
     fonts: Populated<(&RegularFont, &ItalicFont, &BoldFont, &BoldItalicFont), With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
@@ -202,7 +202,7 @@ fn update_font(
 
 // Font Size
 
-fn on_add_font_size(on_add: Trigger<OnAdd, FontSize>, mut commands: Commands) {
+fn on_add_font_size(on_add: On<Add, FontSize>, mut commands: Commands) {
     commands.entity(on_add.target()).trigger(UpdateFontSize);
 }
 
@@ -215,12 +215,12 @@ fn changed_font_size(
     commands.trigger_targets(UpdateFontSize, entities);
 }
 
-fn on_remove_font_size(on_remove: Trigger<OnRemove, FontSize>, mut commands: Commands) {
+fn on_remove_font_size(on_remove: On<Remove, FontSize>, mut commands: Commands) {
     commands.entity(on_remove.target()).trigger(UpdateFontSize);
 }
 
 fn update_font_size(
-    update: Trigger<UpdateFontSize>,
+    update: On<UpdateFontSize>,
     mut reactive_fonts: Query<(&mut TextFont, Option<&FontSize>, Option<&UsingFont>)>,
     fonts: Query<&DefaultFontSize, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
@@ -245,7 +245,7 @@ fn update_font_size(
 
 // Font Color
 
-fn on_add_font_color(on_add: Trigger<OnAdd, FontColor>, mut commands: Commands) {
+fn on_add_font_color(on_add: On<Add, FontColor>, mut commands: Commands) {
     commands.entity(on_add.target()).trigger(UpdateFontColor);
 }
 
@@ -258,12 +258,12 @@ fn changed_font_color(
     commands.trigger_targets(UpdateFontColor, entities);
 }
 
-fn on_remove_font_color(on_remove: Trigger<OnRemove, FontColor>, mut commands: Commands) {
+fn on_remove_font_color(on_remove: On<Remove, FontColor>, mut commands: Commands) {
     commands.entity(on_remove.target()).trigger(UpdateFontColor);
 }
 
 fn update_font_color(
-    update: Trigger<UpdateFontColor>,
+    update: On<UpdateFontColor>,
     mut reactive_fonts: Query<(&mut TextColor, Option<&FontColor>, Option<&UsingFont>)>,
     fonts: Query<&DefaultFontColor, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,

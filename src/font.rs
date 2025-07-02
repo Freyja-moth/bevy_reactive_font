@@ -74,7 +74,7 @@ pub struct UsingFont(Entity);
 ///
 /// This doesn't need to be set, but a font will have to be manually specified for each peice of
 /// text if not.
-#[derive(Resource, Reflect)]
+#[derive(Resource, Reflect, Debug)]
 pub struct DefaultFont(pub Entity);
 impl DefaultFont {
     pub fn new(value: Entity) -> Self {
@@ -99,7 +99,7 @@ impl DefaultFont {
 pub struct FontCollection;
 
 /// All the text that uses a specific [`FontCollection`]
-#[derive(Component, Reflect, Default)]
+#[derive(Component, Reflect, Default, Debug)]
 #[relationship_target(relationship = UsingFont)]
 pub struct UsedBy(Vec<Entity>);
 

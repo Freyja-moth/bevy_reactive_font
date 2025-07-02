@@ -174,7 +174,9 @@ fn update_font(
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
     let (mut text_font, is_italic, is_bold, using_font) =
-        reactive_fonts.get_mut(update.target())?;
+        reactive_fonts
+            .get_mut(update.target())
+            .map_err(|err| FontError::InvalidReactiveFont(update.target(), err))?;
 
     let current_font = using_font
         .map(UsingFont::get)
@@ -188,7 +190,9 @@ fn update_font(
         ItalicFont(italic_font),
         BoldFont(bold_font),
         BoldItalicFont(bold_italic_font),
-    ) = fonts.get(current_font)?;
+    ) = fonts
+        .get(current_font)
+        .map_err(|err| FontError::InvalidFont(update.target(), err))?;
 
     let font = match (is_italic, is_bold) {
         (true, true) => bold_italic_font,
@@ -227,7 +231,9 @@ fn update_font_size(
     fonts: Query<&DefaultFontSize, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
-    let (mut text_font, font_size, using_font) = reactive_fonts.get_mut(update.target())?;
+    let (mut text_font, font_size, using_font) = reactive_fonts
+        .get_mut(update.target())
+        .map_err(|err| FontError::InvalidReactiveFont(update.target(), err))?;
 
     let current_font = using_font
         .map(UsingFont::get)
@@ -236,7 +242,9 @@ fn update_font_size(
             text: update.target(),
         })?;
 
-    let default_font_size = fonts.get(current_font)?;
+    let default_font_size = fonts
+        .get(current_font)
+        .map_err(|err| FontError::InvalidFont(update.target(), err))?;
 
     text_font.font_size = font_size
         .map(FontSize::into_inner)
@@ -270,7 +278,9 @@ fn update_font_color(
     fonts: Query<&DefaultFontColor, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
-    let (mut text_color, font_color, using_font) = reactive_fonts.get_mut(update.target())?;
+    let (mut text_color, font_color, using_font) = reactive_fonts
+        .get_mut(update.target())
+        .map_err(|err| FontError::InvalidReactiveFont(update.target(), err))?;
 
     let current_font = using_font
         .map(UsingFont::get)
@@ -279,7 +289,9 @@ fn update_font_color(
             text: update.target(),
         })?;
 
-    let default_font_color = fonts.get(current_font)?;
+    let default_font_color = fonts
+        .get(current_font)
+        .map_err(|err| FontError::InvalidFont(update.target(), err))?;
 
     text_color.0 = font_color
         .map(FontColor::into_inner)

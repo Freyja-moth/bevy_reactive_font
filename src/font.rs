@@ -12,7 +12,7 @@ pub struct Bold;
 ///
 /// This will ignore [`DefaultFontSize`] and will stay the same size even if [`DefaultFontSize`]
 /// changes.
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Clone, Debug)]
 pub struct FontSize(pub f32);
 impl From<f32> for FontSize {
     fn from(value: f32) -> Self {
@@ -37,7 +37,7 @@ impl FontSize {
 ///
 /// This will ignore [`DefaultFontColor`] and will stay the same size even if [`DefaultFontColor`]
 /// changes.
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Clone, Default, Debug)]
 pub struct FontColor(pub Color);
 impl<C: Into<Color>> From<C> for FontColor {
     fn from(value: C) -> Self {
@@ -104,7 +104,7 @@ pub struct FontCollection;
 pub struct UsedBy(Vec<Entity>);
 
 /// The regular font used by a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct RegularFont(pub Handle<Font>);
 impl From<Handle<Font>> for RegularFont {
     fn from(value: Handle<Font>) -> Self {
@@ -121,7 +121,7 @@ impl RegularFont {
 }
 
 /// The italic font used by a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct ItalicFont(pub Handle<Font>);
 impl From<Handle<Font>> for ItalicFont {
     fn from(value: Handle<Font>) -> Self {
@@ -138,7 +138,7 @@ impl ItalicFont {
 }
 
 /// The bold font used by a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct BoldFont(pub Handle<Font>);
 impl From<Handle<Font>> for BoldFont {
     fn from(value: Handle<Font>) -> Self {
@@ -155,7 +155,7 @@ impl BoldFont {
 }
 
 /// The bold-italic font used by a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct BoldItalicFont(pub Handle<Font>);
 impl From<Handle<Font>> for BoldItalicFont {
     fn from(value: Handle<Font>) -> Self {
@@ -172,7 +172,7 @@ impl BoldItalicFont {
 }
 
 /// The default font size for a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Clone, Debug)]
 pub struct DefaultFontSize(pub f32);
 impl From<f32> for DefaultFontSize {
     fn from(value: f32) -> Self {
@@ -196,7 +196,7 @@ impl DefaultFontSize {
 }
 
 /// The default font color for a [`FontCollection`]
-#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
+#[derive(Component, Reflect, DerefMut, Deref, PartialEq, Clone, Default, Debug)]
 pub struct DefaultFontColor(pub Color);
 impl DefaultFontColor {
     /// Creates a new [`DefaultFontColor`]

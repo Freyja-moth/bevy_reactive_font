@@ -18,7 +18,23 @@ pub struct ReactiveFontPlugin;
 
 impl Plugin for ReactiveFontPlugin {
     fn build(&self, app: &mut App) {
-        app.add_observer(on_add_reactive_font)
+        app
+            .register_type::<Italic>()
+            .register_type::<Bold>()
+            .register_type::<FontSize>()
+            .register_type::<FontColor>()
+            .register_type::<ReactiveFont>()
+            .register_type::<UsingFont>()
+            .register_type::<DefaultFont>()
+            .register_type::<FontCollection>()
+            .register_type::<UsedBy>()
+            .register_type::<RegularFont>()
+            .register_type::<ItalicFont>()
+            .register_type::<BoldFont>()
+            .register_type::<BoldItalicFont>()
+            .register_type::<DefaultFontSize>()
+            .register_type::<DefaultFontColor>()
+            .add_observer(on_add_reactive_font)
             .add_systems(
                 Update,
                 (

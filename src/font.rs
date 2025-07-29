@@ -66,7 +66,7 @@ pub struct ReactiveFont;
 /// [`DefaultFont`]
 #[derive(Component, Reflect, Debug)]
 #[relationship(relationship_target = UsedBy)]
-pub struct UsingFont(Entity);
+pub struct UsingFont(pub Entity);
 
 // Font Collections
 

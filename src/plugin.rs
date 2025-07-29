@@ -131,9 +131,7 @@ fn default_font_size_changed(
         .flat_map(|used_by| used_by.iter())
         .collect::<Vec<_>>();
 
-    if !entities.is_empty() {
-        commands.trigger_targets(UpdateFontSize, entities);
-    }
+    commands.trigger_targets(UpdateFontSize, entities);
 }
 
 fn default_font_color_changed(
@@ -156,9 +154,7 @@ fn default_font_color_changed(
         .flat_map(|used_by| used_by.iter())
         .collect::<Vec<_>>();
 
-    if !entities.is_empty() {
-        commands.trigger_targets(UpdateFontColor, entities);
-    }
+    commands.trigger_targets(UpdateFontColor, entities);
 }
 
 // Font Handles

@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
 /// Marks that a peice of text should be italic
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone, Default)]
 pub struct Italic;
 
 /// Marks that a peice of text should be bold
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone, Default)]
 pub struct Bold;
 
 /// How large the text should be.
@@ -59,12 +59,12 @@ impl FontColor {
 
 /// A marker component that indicates that a peice of text should be styled by the [`ReactiveFontPlugin`]. Text
 /// without this marker will not be styled
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone, Default)]
 pub struct ReactiveFont;
 
 /// This font that a [`ReactiveFont`] is using. If this is not specified it will default to
 /// [`DefaultFont`]
-#[derive(Component, Reflect, Debug)]
+#[derive(Component, Reflect, Clone, Debug)]
 #[relationship(relationship_target = UsedBy)]
 pub struct UsingFont(pub Entity);
 
@@ -74,7 +74,7 @@ pub struct UsingFont(pub Entity);
 ///
 /// This doesn't need to be set, but a font will have to be manually specified for each peice of
 /// text if not.
-#[derive(Resource, Reflect, Debug)]
+#[derive(Resource, Reflect, Clone, Debug)]
 pub struct DefaultFont(pub Entity);
 impl DefaultFont {
     pub fn new(value: Entity) -> Self {
@@ -86,7 +86,7 @@ impl DefaultFont {
 }
 
 /// A collection of font information.
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone, Default)]
 #[require(
     RegularFont,
     ItalicFont,
@@ -99,7 +99,7 @@ impl DefaultFont {
 pub struct FontCollection;
 
 /// All the text that uses a specific [`FontCollection`]
-#[derive(Component, Reflect, Default, Debug)]
+#[derive(Component, Reflect, Clone, Default, Debug)]
 #[relationship_target(relationship = UsingFont)]
 pub struct UsedBy(Vec<Entity>);
 

@@ -154,14 +154,6 @@ fn default_font_color_changed(
 // Font Handles
 
 fn selected_font(on_add: On<Add, UsingFont>, mut commands: Commands) {
-    commands.entity(on_add.target()).trigger(UpdateFont);
-}
-
-fn deselected_font(on_remove: On<Remove, UsingFont>, mut commands: Commands) {
-    commands.entity(on_remove.target()).trigger(UpdateFont);
-}
-
-fn on_add_font_tag(on_add: On<Add, (Bold, Italic)>, mut commands: Commands) {
     commands
         .entity(on_add.target())
         .trigger(UpdateFont)
@@ -169,12 +161,20 @@ fn on_add_font_tag(on_add: On<Add, (Bold, Italic)>, mut commands: Commands) {
         .trigger(UpdateFontColor);
 }
 
-fn on_remove_font_tag(on_remove: On<Remove, (Bold, Italic)>, mut commands: Commands) {
+fn deselected_font(on_remove: On<Remove, UsingFont>, mut commands: Commands) {
     commands
         .entity(on_remove.target())
         .trigger(UpdateFont)
         .trigger(UpdateFontSize)
         .trigger(UpdateFontColor);
+}
+
+fn on_add_font_tag(on_add: On<Add, (Bold, Italic)>, mut commands: Commands) {
+    commands.entity(on_add.target()).trigger(UpdateFont);
+}
+
+fn on_remove_font_tag(on_remove: On<Remove, (Bold, Italic)>, mut commands: Commands) {
+    commands.entity(on_remove.target()).trigger(UpdateFont);
 }
 
 #[allow(clippy::type_complexity)]

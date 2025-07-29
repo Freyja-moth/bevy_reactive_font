@@ -95,9 +95,7 @@ fn font_handle_changed(
     >,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFont, entities);
@@ -118,9 +116,7 @@ fn default_font_size_changed(
     font_handles: Populated<&UsedBy, Changed<DefaultFontSize>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFontSize, entities);
@@ -141,9 +137,7 @@ fn default_font_color_changed(
     font_handles: Populated<&UsedBy, Changed<DefaultFontColor>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFontColor, entities);
@@ -168,11 +162,19 @@ fn deselected_font(on_remove: On<Remove, UsingFont>, mut commands: Commands) {
 }
 
 fn on_add_font_tag(on_add: On<Add, (Bold, Italic)>, mut commands: Commands) {
-    commands.entity(on_add.target()).trigger(UpdateFont);
+    commands
+        .entity(on_add.target())
+        .trigger(UpdateFont)
+        .trigger(UpdateFontSize)
+        .trigger(UpdateFontColor);
 }
 
 fn on_remove_font_tag(on_remove: On<Remove, (Bold, Italic)>, mut commands: Commands) {
-    commands.entity(on_remove.target()).trigger(UpdateFont);
+    commands
+        .entity(on_remove.target())
+        .trigger(UpdateFont)
+        .trigger(UpdateFontSize)
+        .trigger(UpdateFontColor);
 }
 
 #[allow(clippy::type_complexity)]
@@ -182,6 +184,12 @@ fn update_font(
     fonts: Populated<(&RegularFont, &ItalicFont, &BoldFont, &BoldItalicFont), With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    // No idea why but when using a global observer and triggering with an empty vec sometimes this
+    // happens
+    if update.target() == Entity::PLACEHOLDER {
+        return Ok(());
+    }
+
     let (mut text_font, is_italic, is_bold, using_font) =
         reactive_fonts
             .get_mut(update.target())
@@ -240,6 +248,12 @@ fn update_font_size(
     fonts: Query<&DefaultFontSize, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    // No idea why but when using a global observer and triggering with an empty vec sometimes this
+    // happens
+    if update.target() == Entity::PLACEHOLDER {
+        return Ok(());
+    }
+
     let (mut text_font, font_size, using_font) = reactive_fonts
         .get_mut(update.target())
         .map_err(|err| FontError::InvalidReactiveFont(update.target(), err))?;
@@ -287,6 +301,12 @@ fn update_font_color(
     fonts: Query<&DefaultFontColor, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    // No idea why but when using a global observer and triggering with an empty vec sometimes this
+    // happens
+    if update.target() == Entity::PLACEHOLDER {
+        return Ok(());
+    }
+
     let (mut text_color, font_color, using_font) = reactive_fonts
         .get_mut(update.target())
         .map_err(|err| FontError::InvalidReactiveFont(update.target(), err))?;

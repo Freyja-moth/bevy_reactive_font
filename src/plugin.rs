@@ -2,15 +2,15 @@ use crate::prelude::*;
 use bevy::{ecs::relationship::Relationship, prelude::*};
 
 /// Updates the font for the entity it is triggered on.
-#[derive(Event, EntityEvent)]
+#[derive(EntityEvent)]
 pub struct UpdateFont;
 
 /// Updates the [`FontSize`] for the entity it is triggered on.
-#[derive(Event, EntityEvent)]
+#[derive(EntityEvent)]
 pub struct UpdateFontSize;
 
 /// Updates the [`FontColor`] for the entity it is triggered on.
-#[derive(Event, EntityEvent)]
+#[derive(EntityEvent)]
 pub struct UpdateFontColor;
 
 /// A plugin that manages [`ReactiveFont`]'s and [`FontCollection`]'s
@@ -18,8 +18,7 @@ pub struct ReactiveFontPlugin;
 
 impl Plugin for ReactiveFontPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .register_type::<Italic>()
+        app.register_type::<Italic>()
             .register_type::<Bold>()
             .register_type::<FontSize>()
             .register_type::<FontColor>()
@@ -96,9 +95,7 @@ fn font_handle_changed(
     >,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFont, entities);
@@ -109,9 +106,7 @@ fn font_handle_changed(
         .flat_map(|used_by| used_by.iter())
         .collect::<Vec<_>>();
 
-    if !entities.is_empty() {
-        commands.trigger_targets(UpdateFont, entities);
-    }
+    commands.trigger_targets(UpdateFont, entities);
 }
 
 fn default_font_size_changed(
@@ -121,9 +116,7 @@ fn default_font_size_changed(
     font_handles: Populated<&UsedBy, Changed<DefaultFontSize>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFontSize, entities);
@@ -134,9 +127,7 @@ fn default_font_size_changed(
         .flat_map(|used_by| used_by.iter())
         .collect::<Vec<_>>();
 
-    if !entities.is_empty() {
-        commands.trigger_targets(UpdateFontSize, entities);
-    }
+    commands.trigger_targets(UpdateFontSize, entities);
 }
 
 fn default_font_color_changed(
@@ -146,9 +137,7 @@ fn default_font_color_changed(
     font_handles: Populated<&UsedBy, Changed<DefaultFontColor>>,
 ) {
     // If the default font has changed, update all fonts that are using it
-    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0))
-        && !fonts.is_empty()
-    {
+    if default_font.is_some_and(|default_font| font_handles.contains(default_font.0)) {
         let entities = fonts.iter().collect::<Vec<_>>();
 
         commands.trigger_targets(UpdateFontColor, entities);
@@ -159,9 +148,7 @@ fn default_font_color_changed(
         .flat_map(|used_by| used_by.iter())
         .collect::<Vec<_>>();
 
-    if !entities.is_empty() {
-        commands.trigger_targets(UpdateFontColor, entities);
-    }
+    commands.trigger_targets(UpdateFontColor, entities);
 }
 
 // Font Handles

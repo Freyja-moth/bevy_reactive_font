@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{asset::AsAssetId, prelude::*};
 
 /// Marks that a peice of text should be italic
 #[derive(Component, Reflect)]
@@ -106,6 +106,12 @@ pub struct UsedBy(Vec<Entity>);
 /// The regular font used by a [`FontCollection`]
 #[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct RegularFont(pub Handle<Font>);
+impl AsAssetId for RegularFont {
+    type Asset = Font;
+    fn as_asset_id(&self) -> AssetId<Self::Asset> {
+        self.0.id()
+    }
+}
 impl From<Handle<Font>> for RegularFont {
     fn from(value: Handle<Font>) -> Self {
         Self::new(value)
@@ -123,6 +129,12 @@ impl RegularFont {
 /// The italic font used by a [`FontCollection`]
 #[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct ItalicFont(pub Handle<Font>);
+impl AsAssetId for ItalicFont {
+    type Asset = Font;
+    fn as_asset_id(&self) -> AssetId<Self::Asset> {
+        self.0.id()
+    }
+}
 impl From<Handle<Font>> for ItalicFont {
     fn from(value: Handle<Font>) -> Self {
         Self::new(value)
@@ -140,6 +152,12 @@ impl ItalicFont {
 /// The bold font used by a [`FontCollection`]
 #[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct BoldFont(pub Handle<Font>);
+impl AsAssetId for BoldFont {
+    type Asset = Font;
+    fn as_asset_id(&self) -> AssetId<Self::Asset> {
+        self.0.id()
+    }
+}
 impl From<Handle<Font>> for BoldFont {
     fn from(value: Handle<Font>) -> Self {
         Self::new(value)
@@ -157,6 +175,12 @@ impl BoldFont {
 /// The bold-italic font used by a [`FontCollection`]
 #[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]
 pub struct BoldItalicFont(pub Handle<Font>);
+impl AsAssetId for BoldItalicFont {
+    type Asset = Font;
+    fn as_asset_id(&self) -> AssetId<Self::Asset> {
+        self.0.id()
+    }
+}
 impl From<Handle<Font>> for BoldItalicFont {
     fn from(value: Handle<Font>) -> Self {
         Self::new(value)

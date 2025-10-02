@@ -1,5 +1,8 @@
 use crate::prelude::*;
-use bevy::{ecs::relationship::Relationship, prelude::*};
+use bevy::{
+    ecs::{query::QueryEntityError, relationship::Relationship},
+    prelude::*,
+};
 
 /// Updates the font for the entity it is triggered on.
 #[derive(EntityEvent)]
@@ -18,22 +21,7 @@ pub struct ReactiveFontPlugin;
 
 impl Plugin for ReactiveFontPlugin {
     fn build(&self, app: &mut App) {
-        app.register_type::<Italic>()
-            .register_type::<Bold>()
-            .register_type::<FontSize>()
-            .register_type::<FontColor>()
-            .register_type::<ReactiveFont>()
-            .register_type::<UsingFont>()
-            .register_type::<DefaultFont>()
-            .register_type::<FontCollection>()
-            .register_type::<UsedBy>()
-            .register_type::<RegularFont>()
-            .register_type::<ItalicFont>()
-            .register_type::<BoldFont>()
-            .register_type::<BoldItalicFont>()
-            .register_type::<DefaultFontSize>()
-            .register_type::<DefaultFontColor>()
-            .add_observer(on_add_reactive_font)
+        app.add_observer(on_add_reactive_font)
             .add_systems(
                 Update,
                 (
@@ -176,6 +164,11 @@ fn update_font(
     fonts: Populated<(&RegularFont, &ItalicFont, &BoldFont, &BoldItalicFont), With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    if let Err(QueryEntityError::EntityDoesNotExist(_)) = reactive_fonts.get_mut(update.0) {
+        // Happens when the entity has been despawned, ignore it.
+        return Ok(());
+    }
+
     let (mut text_font, is_italic, is_bold, using_font) = reactive_fonts
         .get_mut(update.0)
         .map_err(|err| FontError::InvalidReactiveFont(update.0, err))?;
@@ -231,6 +224,11 @@ fn update_font_size(
     fonts: Query<&DefaultFontSize, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    if let Err(QueryEntityError::EntityDoesNotExist(_)) = reactive_fonts.get_mut(update.0) {
+        // Happens when the entity has been despawned, ignore it.
+        return Ok(());
+    }
+
     let (mut text_font, font_size, using_font) = reactive_fonts
         .get_mut(update.0)
         .map_err(|err| FontError::InvalidReactiveFont(update.0, err))?;
@@ -276,6 +274,11 @@ fn update_font_color(
     fonts: Query<&DefaultFontColor, With<FontCollection>>,
     default_font: Option<Res<DefaultFont>>,
 ) -> Result<(), BevyError> {
+    if let Err(QueryEntityError::EntityDoesNotExist(_)) = reactive_fonts.get_mut(update.0) {
+        // Happens when the entity has been despawned, ignore it.
+        return Ok(());
+    }
+
     let (mut text_color, font_color, using_font) = reactive_fonts
         .get_mut(update.0)
         .map_err(|err| FontError::InvalidReactiveFont(update.0, err))?;

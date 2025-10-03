@@ -1,5 +1,7 @@
 use bevy::{asset::AsAssetId, prelude::*};
 
+use crate::persistent_relationship_source::NeverEmptyVec;
+
 /// Marks that a peice of text should be italic
 #[derive(Component, Reflect)]
 pub struct Italic;
@@ -66,7 +68,7 @@ pub struct ReactiveFont;
 /// [`DefaultFont`]
 #[derive(Component, Reflect, Debug)]
 #[relationship(relationship_target = UsedBy)]
-pub struct UsingFont(Entity);
+pub struct UsingFont(pub Entity);
 
 // Font Collections
 
@@ -101,7 +103,7 @@ pub struct FontCollection;
 /// All the text that uses a specific [`FontCollection`]
 #[derive(Component, Reflect, Default, Debug)]
 #[relationship_target(relationship = UsingFont)]
-pub struct UsedBy(Vec<Entity>);
+pub struct UsedBy(NeverEmptyVec<Entity>);
 
 /// The regular font used by a [`FontCollection`]
 #[derive(Component, Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Default, Debug)]

@@ -185,7 +185,7 @@ fn update_font(
         BoldItalicFont(bold_italic_font),
     ) = fonts
         .get(current_font)
-        .map_err(|err| FontError::InvalidFont(update.0, err))?;
+        .map_err(|err| FontError::InvalidFont(current_font, err))?;
 
     let font = match (is_italic, is_bold) {
         (true, true) => bold_italic_font,
@@ -240,7 +240,7 @@ fn update_font_size(
 
     let default_font_size = fonts
         .get(current_font)
-        .map_err(|err| FontError::InvalidFont(update.0, err))?;
+        .map_err(|err| FontError::InvalidFont(current_font, err))?;
 
     text_font.font_size = font_size
         .map(FontSize::into_inner)
@@ -290,7 +290,7 @@ fn update_font_color(
 
     let default_font_color = fonts
         .get(current_font)
-        .map_err(|err| FontError::InvalidFont(update.0, err))?;
+        .map_err(|err| FontError::InvalidFont(current_font, err))?;
 
     text_color.0 = font_color
         .map(FontColor::into_inner)

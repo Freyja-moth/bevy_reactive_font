@@ -10,7 +10,7 @@ use bevy::{
 ///
 /// The only relationship implementation removes [`RelationshipTarget`]'s when they are
 /// empty, which is beyond frustrating. This has been marked as *intended* and won't be fixed.
-#[derive(Reflect, DerefMut, Deref, Debug)]
+#[derive(Reflect, DerefMut, Deref, PartialEq, Eq, Clone, Debug)]
 pub struct NeverEmptyVec<T>(Vec<T>);
 
 impl<T> Default for NeverEmptyVec<T> {
